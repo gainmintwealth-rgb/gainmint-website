@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gainmint Wealth Solutions | Authorised Partner – Motilal Oswal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0a7b60; --gold:#d4af37; --line:#e7ecf2; --wa:#25D366; --ink:#0f1114;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f1317;background:#fff}
+  h1,h2,h3{font-family:Montserrat,Inter,Arial,sans-serif}
+
+  /* Top bar */
+  .top{position:sticky;top:0;z-index:30;background:#ffffffcc;backdrop-filter:saturate(1.1) blur(6px);
+       display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;gap:12px;align-items:center}
+  .brand img{width:110px;height:110px;object-fit:contain;border-radius:16px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.08)}
+  .brand .name{font-weight:900;font-size:clamp(18px,2.5vw,26px);color:var(--ink)}
+  .nav{display:flex;gap:18px;font-weight:700}
+  .nav a{padding:8px 10px;border-radius:10px;color:#32414f;text-decoration:none}
+  .nav a:hover{background:#f2f5f8;color:var(--green)}
+  .nav .pill{border:2px solid var(--gold);color:var(--gold);padding:8px 14px;border-radius:999px}
+
+  /* Hero */
+  .hero{position:relative;min-height:620px;display:grid;place-items:center;border-bottom:6px solid var(--gold);
+        background:center/cover no-repeat}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,123,96,.45),rgba(6,107,83,.45))}
+  .hero-inner{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:56px 18px;color:#fff}
+  .badge-logo{width:220px;background:#fff;border-radius:16px;padding:10px;box-shadow:0 10px 28px rgba(0,0,0,.25);margin-bottom:12px}
+  .hero h1{font-size:clamp(30px,5.2vw,54px);line-height:1.08;margin:10px 0}
+  .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .btn{display:inline-block;padding:12px 18px;border-radius:999px;font-weight:900;border:2px solid transparent;text-decoration:none}
+  .btn-primary{background:var(--gold);color:#fff}.btn-primary:hover{filter:brightness(.95)}
+  .btn-wa{background:var(--wa);color:#fff}.btn-wa:hover{filter:brightness(.95)}
+
+  section{max-width:1120px;margin:0 auto;padding:54px 18px}
+  h2{color:var(--green);text-align:center;margin:0 0 22px;font-size:clamp(22px,3.6vw,30px)}
+
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .v{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+  .v strong{display:block}.v span{color:#6e7a86}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+  .card h3{margin:0 0 6px}
+  .bul{padding-left:20px;margin:10px 0}.bul li{margin:6px 0;color:#445159}
+
+  .calc-gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  .tile{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:.18s;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .tile:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.08)}
+  .tile img{width:100%;height:180px;object-fit:cover;background:#f3f6f8}
+  .tile .t{padding:12px 14px;font-weight:900;color:#22313b}
+
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .modal.active{display:flex}
+  .box{background:#fff;max-width:960px;width:100%;border-radius:16px;border:1px solid var(--line);padding:18px}
+  .mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .close{background:#eef2f5;border:none;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer}
+  .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  label{font-weight:800}
+  input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px}
+  .act{margin-top:12px}
+  .act button{background:var(--green);color:#fff;border:none;padding:12px 18px;border-radius:10px;font-weight:900;cursor:pointer}
+  .res{margin-top:14px;color:var(--green);font-weight:900}
+
+  .contact{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+  .ctabar{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+  footer{background:#0f1215;color:#cfd6dd;text-align:center;padding:26px 14px;margin-top:34px;font-size:.92rem}
+
+  @media(max-width:1200px){ .calc-gallery{grid-template-columns:repeat(4,1fr)} }
+  @media(max-width:980px){
+    .values,.grid{grid-template-columns:1fr 1fr}
+    .calc-gallery{grid-template-columns:repeat(2,1fr)}
+    .contact{grid-template-columns:1fr}
+  }
+  @media(max-width:640px){
+    .values,.grid{grid-template-columns:1fr}
+    .calc-gallery{grid-template-columns:1fr}
+    .brand img{width:92px;height:92px}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP -->
+<div class="top">
+  <div class="brand">
+    <img src="Gain_mint_logo_fine_new.png" alt="Gainmint Logo">
+    <div class="name">Gainmint Wealth Solutions</div>
+  </div>
+  <nav class="nav">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#calculators">Calculators</a>
+    <a href="https://wa.me/919686138068" target="_blank" class="pill">WhatsApp</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<header class="hero" style="background-image:url('Background_Images/1.png')">
+  <div class="hero-inner">
+    <img class="badge-logo" src="Gain_mint_logo_fine_new.png" alt="Gainmint">
+    <p><strong>Authorised Partner – Motilal Oswal Financial Services Ltd.</strong></p>
+    <h1>Invest Intelligently.<br><span style="color:#ffe9a6">Grow Confidently.</span></h1>
+    <p>Human intelligence + quantitative research, simplified for you.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="https://mosl.co/MOSWEB/TZe6LKwoXE" target="_blank" rel="noopener">Open Account Now →</a>
+      <a class="btn btn-wa" href="https://wa.me/919686138068?text=Hi%20Gainmint%2C%20I%20want%20to%20start%20investing" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<!-- VALUES -->
+<section>
+  <div class="values">
+    <div class="v"><strong>🔎 Deep Research</strong><span>Institutional-grade screening & valuations</span></div>
+    <div class="v"><strong>📈 Consistent Process</strong><span>Rules-driven risk & portfolio discipline</span></div>
+    <div class="v"><strong>🤝 Transparent</strong><span>No jargon — clear rationales & updates</span></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Gainmint</h2>
+  <p style="max-width:900px;margin:0 auto;text-align:center;color:#43505c">
+    We are a research-backed wealth advisory partnered with Motilal Oswal Financial Services Ltd. With CFA-grade rigor and robust data models,
+    we help investors compound intelligently across equities, mutual funds, derivatives and goal planning — with focus on risk, transparency and outcomes.
+  </p>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2>What We Do</h2>
+  <div class="grid">
+    <div class="card"><h3>Equity Portfolios</h3><ul class="bul"><li>High-conviction ideas & sizing</li><li>Clear add/trim & risk levels</li></ul></div>
+    <div class="card"><h3>Mutual Funds & SIPs</h3><ul class="bul"><li>Goal-aligned allocation</li><li>Periodic rebalancing & review</li></ul></div>
+    <div class="card"><h3>Derivatives & Commodities</h3><ul class="bul"><li>Structured strategies with defined risk</li><li>Event & hedge frameworks</li></ul></div>
+    <div class="card"><h3>Algo & Quant Tools</h3><ul class="bul"><li>Screeners & tested frameworks</li><li>Rule-based execution</li></ul></div>
+    <div class="card"><h3>Retirement & Tax Planning</h3><ul class="bul"><li>Corpus & cash-flow mapping</li><li>Tax-aware drawdown design</li></ul></div>
+    <div class="card"><h3>Research & Insights</h3><ul class="bul"><li>Outlooks & thematic studies</li><li>Portfolio diagnostics</li></ul></div>
+  </div>
+</section>
+
+<!-- CALCULATORS -->
+<section id="calculators">
+  <h2>📊 Our Calculators</h2>
+  <div class="calc-gallery">
+    <div class="tile" onclick="openModal('riskModal')">
+      <img src="Calculator%20images/Risk_Tolerance.png" alt="Risk Tolerance"><div class="t">Risk Tolerance</div>
+    </div>
+    <div class="tile" onclick="openModal('retModal')">
+      <img src="Calculator%20images/Retirment_Corpus.png" alt="Retirement Corpus"><div class="t">Retirement Corpus</div>
+    </div>
+    <div class="tile" onclick="openModal('cagrModal')">
+      <img src="Calculator%20images/CAGR%20Calculator.png" alt="CAGR"><div class="t">CAGR</div>
+    </div>
+    <div class="tile" onclick="openModal('fvModal')">
+      <img src="Calculator%20images/Final_Value.png" alt="Final Value"><div class="t">Final Value</div>
+    </div>
+    <div class="tile" onclick="openModal('sipModal')">
+      <img src="Calculator%20images/SIP_Returns.png" alt="SIP Returns"><div class="t">SIP Returns</div>
+    </div>
+  </div>
+</section>
+
+<!-- MODALS -->
+<!-- Risk Tolerance (simple quiz) -->
+<div id="riskModal" class="modal"><div class="box">
+  <div class="mhead"><h3>Risk Tolerance Quiz</h3><button class="close" onclick="closeModal('riskModal')">Close</button></div>
+  <div class="form-2col" style="grid-template-columns:1fr">
+    <label>1) What matters more?</label>
+    <select id="q1"><option value="1">Capital safety</option><option value="2">Balanced growth</option><option value="3">Maximum growth</option></select>
+    <label>2) Reaction to a 10% fall in a month?</label>
+    <select id="q2"><option value="1">Exit immediately</option><option value="2">Hold</option><option value="3">Add more</option></select>
+    <label>3) Investment horizon</label>
+    <select id="q3"><option value="1">≤ 2 years</option><option value="2">3–5 years</option><option value="3">≥ 6 years</option></select>
+    <label>4) % in equity you’re comfortable with?</label>
+    <select id="q4"><option value="1">≤ 30%</option><option value="2">31–60%</option><option value="3">> 60%</option></select>
+    <label>5) Knowledge/experience level</label>
+    <select id="q5"><option value="1">Beginner</option><option value="2">Intermediate</option><option value="3">Advanced</option></select>
+  </div>
+  <div class="act"><button onclick="riskScore()">Calculate</button></div>
+  <div id="riskRes" class="res"></div>
+  <p style="color:#7b8793">This is a simple orientation tool — not investment advice.</p>
+</div></div>
+
+<!-- Retirement Corpus (corrected) -->
+<div id="retModal" class="modal"><div class="box">
+  <div class="mhead"><h3>Required Retirement Corpus</h3><button class="close" onclick="closeModal('retModal')">Close</button></div>
+  <div class="form-2col">
+    <div>
+      <label>Current Monthly Expenses (₹)</label>
+      <input id="rc_exp" placeholder="50000" inputmode="decimal">
+    </div>
+    <div>
+      <label>Years until Retirement</label>
+      <input id="rc_years" placeholder="20" inputmode="decimal">
+    </div>
+    <div>
+      <label>Expected Inflation (%)</label>
+      <input id="rc_infl" placeholder="6" inputmode="decimal">
+    </div>
+    <div>
+      <label>Post-Retirement Years</label>
+      <input id="rc_postyrs" placeholder="25" inputmode="decimal">
+    </div>
+    <div>
+      <label>Return after Retirement (%)</label>
+      <input id="rc_postret" placeholder="7" inputmode="decimal">
+    </div>
+    <div>
+      <label>Return until Retirement (%) (optional, for SIP)</label>
+      <input id="rc_preret" placeholder="12" inputmode="decimal">
+    </div>
+  </div>
+  <div class="act"><button onclick="calcRetirement()">Calculate</button></div>
+  <div id="rc_out" class="res"></div>
+</div></div>
+
+<!-- CAGR -->
+<div id="cagrModal" class="modal"><div class="box">
+  <div class="mhead"><h3>CAGR Calculator</h3><button class="close" onclick="closeModal('cagrModal')">Close</button></div>
+  <div class="form-2col">
+    <div><label>Beginning Value (₹)</label><input id="cagrBeg" type="number" placeholder="100000"></div>
+    <div><label>Ending Value (₹)</label><input id="cagrEnd" type="number" placeholder="180000"></div>
+    <div><label>Years</label><input id="cagrYears" type="number" placeholder="3"></div>
+  </div>
+  <div class="act"><button onclick="calcCAGR()">Calculate</button></div>
+  <div id="cagrRes" class="res"></div>
+</div></div>
+
+<!-- Final Value -->
+<div id="fvModal" class="modal"><div class="box">
+  <div class="mhead"><h3>Final Value — Lumpsum</h3><button class="close" onclick="closeModal('fvModal')">Close</button></div>
+  <div class="form-2col">
+    <div><label>Lumpsum (₹)</label><input id="fvAmt" type="number" placeholder="500000"></div>
+    <div><label>Years</label><input id="fvYears" type="number" placeholder="10"></div>
+    <div><label>Expected Annual Return (%)</label><input id="fvRate" type="number" placeholder="12"></div>
+  </div>
+  <div class="act"><button onclick="calcFV()">Calculate</button></div>
+  <div id="fvRes" class="res"></div>
+</div></div>
+
+<!-- SIP Future Value -->
+<div id="sipModal" class="modal"><div class="box">
+  <div class="mhead"><h3>SIP Returns (Future Value)</h3><button class="close" onclick="closeModal('sipModal')">Close</button></div>
+  <div class="form-2col">
+    <div><label>Monthly SIP (₹)</label><input id="sipMonthly" type="number" placeholder="20000"></div>
+    <div><label>Years</label><input id="sipYears" type="number" placeholder="10"></div>
+    <div><label>Expected Annual Return (%)</label><input id="sipRate" type="number" placeholder="12"></div>
+  </div>
+  <div class="act"><button onclick="calcSIP()">Calculate</button></div>
+  <div id="sipRes" class="res"></div>
+</div></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2>Contact</h2>
+  <div class="contact">
+    <div class="card">
+      <p><strong>Office:</strong> Mysuru, Karnataka</p>
+      <p><strong>Phone:</strong> +91&nbsp;9686138068</p>
+      <p><strong>Email:</strong> gainmint.wealth@gmail.com</p>
+      <p><strong>WhatsApp:</strong> <a href="https://wa.me/919686138068" target="_blank" rel="noopener">Message us</a></p>
+      <div class="ctabar">
+        <a class="btn btn-wa" href="https://wa.me/919686138068?text=Hi%20Gainmint%2C%20please%20schedule%20a%20call" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+        <a class="btn btn-primary" href="https://mosl.co/MOSWEB/TZe6LKwoXE" target="_blank" rel="noopener">Open Account →</a>
+      </div>
+    </div>
+    <div class="card">
+      <p><strong>Office Hours:</strong> Mon–Sat, 10:00–18:00</p>
+      <p><strong>Address:</strong> #208/A1, Hi-tension road, Vijayanagar 2nd stage, Mysore-570016</p>
+      <p style="color:#6e7a86">We respond within business hours. WhatsApp gets the quickest response.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Gainmint Wealth Solutions</strong> — Authorised Partner of Motilal Oswal Financial Services Ltd.</p>
+  <p><em>Disclaimer:</em> Investments in securities markets are subject to market risks. Past performance is not indicative of future returns. This is not investment advice.</p>
+</footer>
+
+<script>
+  // Rotate hero backgrounds
+  const bgs = ['Background_Images/1.png','Background_Images/2.png','Background_Images/3.png','Background_Images/4.png','Background_Images/5.png'];
+  let i=0; setInterval(()=>{ i=(i+1)%bgs.length; document.querySelector('.hero').style.backgroundImage=`url('${bgs[i]}')`; },8000);
+
+  function openModal(id){ document.getElementById(id).classList.add('active'); }
+  function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active')); });
+
+  // Utils
+  const num = (v)=> Number(String(v).replace(/[, ]/g,'')) || 0;
+  const inr = (v)=> '₹ ' + Math.round(v).toLocaleString('en-IN');
+
+  // Risk tolerance
+  function riskScore(){
+    const s=['q1','q2','q3','q4','q5'].reduce((a,id)=>a+Number(document.getElementById(id).value),0);
+    let bucket='Conservative', hint='Higher debt & large-cap tilt suits you.';
+    if(s>=9&&s<=11){bucket='Moderate';hint='Blend of equity/debt with periodic rebalancing.';}
+    if(s>=12){bucket='Aggressive';hint='Higher equity share; expect volatility.';}
+    document.getElementById('riskRes').textContent=`Your profile: ${bucket}. ${hint}`;
+  }
+
+  // CAGR
+  function calcCAGR(){
+    const beg=num(cagrBeg.value), end=num(cagrEnd.value), yrs=num(cagrYears.value);
+    if(!beg||!end||!yrs){alert('Please fill all fields!');return;}
+    const cagr=Math.pow(end/beg,1/yrs)-1;
+    cagrRes.textContent=`CAGR: ${(cagr*100).toFixed(2)}%`;
+  }
+
+  // Final value (lumpsum)
+  function calcFV(){
+    const amt=num(fvAmt.value), yrs=num(fvYears.value), r=(num(fvRate.value))/100;
+    if(!amt||!yrs||(!r&&r!==0)){alert('Please fill all fields!');return;}
+    const fv=amt*Math.pow(1+r,yrs);
+    fvRes.textContent=`Future Value: ${inr(fv)}`;
+  }
+
+  // SIP future value
+  function calcSIP(){
+    const m=num(sipMonthly.value), yrs=num(sipYears.value), rA=(num(sipRate.value))/100;
+    if(!m||!yrs||(!rA&&rA!==0)){alert('Please fill all fields!');return;}
+    const r=rA/12, n=yrs*12;
+    const fv = r===0 ? m*n : m*((Math.pow(1+r,n)-1)/r)*(1+r);
+    sipRes.textContent=`Future Value: ${inr(fv)}`;
+  }
+
+  // Retirement corpus (correct math)
+  // 1) Inflate current monthly expense to retirement: E_ret = E_now * (1+infl)^years
+  // 2) PV of annuity of length postYears at rate postRet (monthly compounding)
+  // 3) Optional: Required monthly contribution until retirement to hit that corpus at preret return
+  function calcRetirement(){
+    const exp = num(rc_exp.value);
+    const years = num(rc_years.value);
+    const infl = num(rc_infl.value)/100;
+    const postYears = num(rc_postyrs.value);
+    const postRet = num(rc_postret.value)/100;
+    const preRet = num(rc_preret.value)/100; // optional
+
+    if(!exp||!years||(!infl&&infl!==0)||!postYears||(!postRet&&postRet!==0)){
+      alert('Please fill all required fields!');
+      return;
+    }
+
+    // Step 1: expense in first month of retirement
+    const monthlyAtRet = exp * Math.pow(1+infl, years);
+
+    // Step 2: PV of monthly withdrawals for postYears at postRet/12
+    const r = postRet/12;
+    const n = postYears*12;
+    const pvFactor = (r===0) ? n : (1 - Math.pow(1+r,-n))/r;
+    const corpus = monthlyAtRet * pvFactor;
+
+    let out = `Required Corpus: ${inr(corpus)}`;
+
+    // Step 3: monthly SIP needed until retirement (if preRet given)
+    if(preRet>0){
+      const rm = preRet/12;
+      const nm = years*12;
+      const accFactor = (rm===0) ? nm : ((Math.pow(1+rm,nm)-1)/rm)*(1+rm);
+      const sipNeeded = corpus / accFactor;
+      out += ` • Monthly Investment Needed: ${inr(sipNeeded)}`;
+    }
+
+    rc_out.textContent = out;
+  }
+</script>
+</body>
+</html>
