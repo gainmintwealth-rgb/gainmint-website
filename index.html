@@ -89,7 +89,8 @@
 <!-- TOP -->
 <div class="top">
   <div class="brand">
-    <img src="assets/images/gain_mint_logo_fine_new.png" alt="Gainmint Logo">
+    <!-- data-filename used by script below to resolve correct path -->
+    <img data-filename="gain_mint_logo_fine_new.png" alt="Gainmint Logo">
     <div class="name">Gainmint Wealth Solutions</div>
   </div>
   <nav class="nav">
@@ -101,9 +102,9 @@
 </div>
 
 <!-- HERO -->
-<header class="hero" style="background-image:url('assets/images/1.png')">
+<header class="hero" data-bgfiles='["1.png","2.png","3.png","4.png","5.png"]'>
   <div class="hero-inner">
-    <img class="badge-logo" src="assets/images/gain_mint_logo_fine_new.png" alt="Gainmint">
+    <img class="badge-logo" data-filename="gain_mint_logo_fine_new.png" alt="Gainmint">
     <p><strong>Authorised Partner – Motilal Oswal Financial Services Ltd.</strong></p>
     <h1>Invest Intelligently.<br><span style="color:#ffe9a6">Grow Confidently.</span></h1>
     <p>Human intelligence + quantitative research, simplified for you.</p>
@@ -119,19 +120,19 @@
   <h2>📊 Our Calculators</h2>
   <div class="calc-gallery">
     <div class="tile" onclick="openModal('riskModal')">
-      <img src="assets/images/risk_tolerance.png" alt="Risk Tolerance"><div class="t">Risk Tolerance</div>
+      <img data-filename="risk_tolerance.png" alt="Risk Tolerance"><div class="t">Risk Tolerance</div>
     </div>
     <div class="tile" onclick="openModal('retModal')">
-      <img src="assets/images/retirement_corpus.png" alt="Retirement Corpus"><div class="t">Retirement Corpus</div>
+      <img data-filename="retirement_corpus.png" alt="Retirement Corpus"><div class="t">Retirement Corpus</div>
     </div>
     <div class="tile" onclick="openModal('cagrModal')">
-      <img src="assets/images/cagr.png" alt="CAGR"><div class="t">CAGR</div>
+      <img data-filename="cagr.png" alt="CAGR"><div class="t">CAGR</div>
     </div>
     <div class="tile" onclick="openModal('fvModal')">
-      <img src="assets/images/final_value.png" alt="Final Value"><div class="t">Final Value</div>
+      <img data-filename="final_value.png" alt="Final Value"><div class="t">Final Value</div>
     </div>
     <div class="tile" onclick="openModal('sipModal')">
-      <img src="assets/images/sip_returns.png" alt="SIP Returns"><div class="t">SIP Returns</div>
+      <img data-filename="sip_returns.png" alt="SIP Returns"><div class="t">SIP Returns</div>
     </div>
   </div>
 </section>
@@ -164,23 +165,80 @@
 </footer>
 
 <script>
-  // Rotate hero backgrounds
-  const bgs = [
-    'assets/images/1.png',
-    'assets/images/2.png',
-    'assets/images/3.png',
-    'assets/images/4.png',
-    'assets/images/5.png'
-  ];
-  let i = 0;
-  setInterval(() => {
-    i = (i + 1) % bgs.length;
-    document.querySelector('.hero').style.backgroundImage = `url('${bgs[i]}')`;
-  }, 8000);
+/*
+  Path resolution strategy:
+  - try /assets/images/{file}
+  - if not found, try /{file} (repo root)
+  - if neither found, use a tiny placeholder SVG data URL so layout doesn't break
+*/
+const ASSETS_PREFIX = 'assets/images/';
+const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250"><rect width="100%" height="100%" fill="#f3f6f8"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9aa7ae" font-size="18">image not found</text></svg>'
+);
 
-  function openModal(id){ document.getElementById(id).classList.add('active'); }
-  function closeModal(id){ document.getElementById(id).classList.remove('active'); }
-  window.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active')); });
+async function urlExists(url) {
+  try {
+    const res = await fetch(url, { method: 'HEAD' });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function resolvePath(filename) {
+  if (!filename) return PLACEHOLDER;
+  const a = ASSETS_PREFIX + filename;
+  if (await urlExists(a)) return a;
+  const b = filename.startsWith('/') ? filename : '/' + filename;
+  if (await urlExists(b)) return b;
+  // last try: maybe root without leading slash (some setups)
+  if (await urlExists(filename)) return filename;
+  return PLACEHOLDER;
+}
+
+// Resolve images marked with data-filename
+async function fixImgs() {
+  const imgs = Array.from(document.querySelectorAll('img[data-filename]'));
+  await Promise.all(imgs.map(async img => {
+    const fn = img.getAttribute('data-filename').trim();
+    const p = await resolvePath(fn);
+    img.src = p;
+  }));
+}
+
+// Resolve hero background rotation AND initial background
+async function setupHeroBackgroundRotation() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  const filesAttr = hero.getAttribute('data-bgfiles');
+  let fileList = [];
+  try { fileList = JSON.parse(filesAttr); } catch(e){ /* ignore */ }
+
+  // resolve each filename to a working URL (first available path)
+  const resolved = await Promise.all(fileList.map(fn => resolvePath(fn)));
+  // set initial background to the first resolved (if there is one)
+  if (resolved.length > 0) {
+    hero.style.backgroundImage = `url('${resolved[0]}')`;
+  }
+  // rotate (only those that are not placeholders)
+  const real = resolved.filter(r => r !== PLACEHOLDER);
+  if (real.length === 0) return;
+  let i = 0;
+  setInterval(()=> {
+    i = (i + 1) % real.length;
+    hero.style.backgroundImage = `url('${real[i]}')`;
+  }, 8000);
+}
+
+function openModal(id){ document.getElementById(id).classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+window.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active')); });
+
+/* init */
+(async function init() {
+  await fixImgs();
+  await setupHeroBackgroundRotation();
+})();
 </script>
 </body>
 </html>
